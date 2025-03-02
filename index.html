@@ -47,10 +47,18 @@
             margin-top: 20px;
             text-align: center;
         }
+        .nav-item:hover{
+            background-color: rgb(56, 56, 56);
+        }
+        footer{
+            text-align: center;
+            color: white;
+            border-radius: 6px;
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-sm bg-secondary">
+    <nav class="navbar navbar-expand-sm bg-secondary" style="border-radius: 6px;">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/MRT3ManilaYellowLine3.svg/609px-MRT3ManilaYellowLine3.svg.png" alt="MRT logo" width="50">
@@ -62,6 +70,13 @@
                 <li class="nav-item">
                     <a class="nav-link" href="page2.html" style="color: whitesmoke;">Transit Schedule</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="page3.html" target="_self" style="color: whitesmoke;">Contact Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://docs.google.com/document/d/18JTlT1uwf9i0uB_0ez0X3Yw7fOp9RdWmFik55lgH-QE/edit?tab=t.0" target="_blank" style="color: whitesmoke;">References</a>
+                </li>
+                
             </ul>
         </div>
     </nav>
@@ -117,9 +132,16 @@
         </div>
     </div>
 
+<br><br><br>
+<footer class="bg-secondary">
+    <p>Jarix Johnuay S. Zales & Alexander C. Tacan</p>
+    <p>9-Topaz</p>
+</footer>
+
+
     <script>
 
-        var fareMatrix = [
+        const fareMatrix = [
             [0, 13, 13, 16, 16, 20, 20, 20, 24, 24, 24, 28, 28], // Taft (0)
             [13, 0, 13, 13, 16, 16, 20, 20, 20, 24, 24, 24, 28], // Magallanes (1)
             [13, 13, 0, 13, 13, 16, 16, 20, 20, 20, 24, 24, 24], // Ayala (2)
