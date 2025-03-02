@@ -4,47 +4,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>Project</title>
+    <title>MRT Train Ticket Price</title>
+    <style>
+        body {
+            background-image: url(https://static.vecteezy.com/system/resources/thumbnails/026/133/129/small_2x/interior-mrt-train-commuter-line-interior-generative-ai-photo.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 1200px;
+        }
+
+        #map img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        #form {
+            padding: 20px;
+        }
+
+        #form label {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        #form select, #form button {
+            font-size: 18px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        #fareResult {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-<center>
-<div class="col-md-4">
-    <form>
-        <label>From:</label> <br><br>
-            <select class="form-select" id="show">
-                <option value="none">Choose</option>
-                <option value="1">Value A</option>
-                <option value="2">Value B</option>
-                <option value="3">Value C</option>
-            </select>
-        <br><br>
+    <nav class="navbar navbar-expand-sm bg-secondary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/MRT3ManilaYellowLine3.svg/609px-MRT3ManilaYellowLine3.svg.png" alt="MRT logo" width="50">
+            </a>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" style="color: whitesmoke;">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="page2.html" style="color: whitesmoke;">Transit Schedule</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+<br><br>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-6" id="map">
+                <img src="https://mapa-metro.com/mapas/Manila/mapa-metro-manila2.png" alt="MRT Map">
+            </div>
+            <div class="col-md-6" id="form">
+                <form>
+                    <label for="from">From:</label><br>
+                    <select class="form-select" id="from">
+                        <option value="none">Choose</option>
+                        <option value="0">Taft</option>
+                        <option value="1">Magallanes</option>
+                        <option value="2">Ayala</option>
+                        <option value="3">Buendia</option>
+                        <option value="4">Guadalupe</option>
+                        <option value="5">Boni</option>
+                        <option value="6">Shaw Blvd.</option>
+                        <option value="7">Ortigas</option>
+                        <option value="8">Santolan</option>
+                        <option value="9">Cubao</option>
+                        <option value="10">Kamuning</option>
+                        <option value="11">Quezon Ave.</option>
+                        <option value="12">North Ave.</option>
+                    </select>
+                    <br><br>
+                    <label for="to">To:</label> <br>
+                    <select class="form-select" id="to">
+                        <option value="none">Choose</option>
+                        <option value="0">Taft</option>
+                        <option value="1">Magallanes</option>
+                        <option value="2">Ayala</option>
+                        <option value="3">Buendia</option>
+                        <option value="4">Guadalupe</option>
+                        <option value="5">Boni</option>
+                        <option value="6">Shaw Blvd.</option>
+                        <option value="7">Ortigas</option>
+                        <option value="8">Santolan</option>
+                        <option value="9">Cubao</option>
+                        <option value="10">Kamuning</option>
+                        <option value="11">Quezon Ave.</option>
+                        <option value="12">North Ave.</option>
+                    </select>
+                    <br><br>
+                    <button type="button" class="btn btn-primary" onclick="showFare()">Show Fare</button>
+                </form>
+                <br><br><br>
+                <h2 style="font-size: 40px" id="fareResult"></h2>
+            </div>
+        </div>
+    </div>
 
-        <label>To:</label> <br><br>
-            <select class="form-select" id="show1">
-                <option value="none">Choose</option>
-                <option value="1">Value A</option>
-                <option value="2">Value B</option>
-                <option value="3">Value C</option>
-            </select>
-        <br><br>
+    <script>
 
-        <button type="Submit" class="btn btn-success" onclick="showValue()">Show</button>
+        var fareMatrix = [
+            [0, 13, 13, 16, 16, 20, 20, 20, 24, 24, 24, 28, 28], // Taft (0)
+            [13, 0, 13, 13, 16, 16, 20, 20, 20, 24, 24, 24, 28], // Magallanes (1)
+            [13, 13, 0, 13, 13, 16, 16, 20, 20, 20, 24, 24, 24], // Ayala (2)
+            [16, 13, 13, 0, 13, 13, 16, 16, 20, 20, 20, 24, 24], // Buendia (3)
+            [16, 16, 13, 13, 0, 13, 13, 16, 16, 20, 20, 20, 24], // Guadalupe (4)
+            [20, 16, 16, 13, 13, 0, 13, 13, 16, 16, 20, 20, 20], // Boni (5)
+            [20, 20, 16, 16, 13, 13, 0, 13, 13, 16, 16, 20, 20], // Shaw Blvd. (6)
+            [20, 20, 20, 16, 16, 13, 13, 0, 13, 13, 16, 16, 20], // Ortigas (7)
+            [24, 20, 20, 20, 16, 16, 13, 13, 0, 13, 13, 16, 16], // Santolan (8)
+            [24, 24, 20, 20, 20, 16, 16, 13, 13, 0, 13, 13, 16], // Cubao (9)
+            [24, 24, 24, 20, 20, 20, 16, 16, 13, 13, 0, 13, 13], // Kamuning (10)
+            [28, 24, 24, 24, 20, 20, 20, 16, 16, 13, 13, 0, 13], // Quezon Ave. (11)
+            [28, 28, 24, 24, 24, 20, 20, 20, 16, 16, 13, 13, 0]  // North Ave. (12)
+        ];
 
-    </form>
-</div>
-</center>
+        //credits to JV and Jake for the help on this part
+        function showFare() {
+            
+            var from = parseInt(document.getElementById("from").value);
+            var to = parseInt(document.getElementById("to").value);
 
-<script>
-    function showValue(){
-        var showMe = document.getElementById("show").value;
-        var showMe1 = document.getElementById("show1").value;
-        var ans = Number(showMe) + Number(showMe1);
-        //var disc =   ;
-        //var final_disc = disc.tofixed(2);
+            
+            if (from === to) {
+                window.alert("Invalid Station: You are already at your destination.");
+                return;
+            }
 
-            window.alert("The value of the select variable is " + ans);
-    }
-</script>
+            
+            var fare = fareMatrix[from][to];
 
+            
+            document.getElementById("fareResult").innerText = `The fare is ₱${fare}.`;
+        }
+    </script>
 </body>
 </html>
